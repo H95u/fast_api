@@ -1,4 +1,3 @@
-from fastapi import Request, Response
 import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
