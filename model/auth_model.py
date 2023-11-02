@@ -1,5 +1,5 @@
 import mysql.connector
-from config.config import dbconfig
+from configs.mysql_config import dbconfig
 from fastapi.responses import JSONResponse
 
 

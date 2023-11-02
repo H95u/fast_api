@@ -2,7 +2,7 @@ import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
-from config.config import dbconfig
+from configs.mysql_config import dbconfig
 
 
 class User(BaseModel):

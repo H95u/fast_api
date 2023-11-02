@@ -6,8 +6,8 @@ obj = UserModel()
 
 
 @router.get('/')
-def hello_world():
-    return "hello world!"
+def hello_api():
+    return "im hieule in the api !"
 
 
 @router.get('/api/users')

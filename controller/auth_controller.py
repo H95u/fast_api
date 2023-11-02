@@ -1,4 +1,4 @@
-from fastapi import Query, Request, APIRouter
+from fastapi import Request, APIRouter
 from model.auth_model import Auth_Model
 
 router = APIRouter()

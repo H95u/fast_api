@@ -2,7 +2,7 @@ import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
-from config.config import dbconfig
+from configs.mysql_config import dbconfig
 
 
 class Saved_sukien(BaseModel):
@@ -14,5 +14,3 @@ class Saved_sukien(BaseModel):
     thoigian_swap: str
     ten_su_kien: str
     noidung_su_kien: str
-
-
