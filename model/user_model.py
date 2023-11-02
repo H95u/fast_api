@@ -74,11 +74,26 @@ class UserModel:
             return {"message": "DELETED_SUCCESSFULLY"}
         return {"message": "CONTACT_DEVELOPER"}
 
-    def update_user_model(self, data):
-        self.cur.execute(
-            f"UPDATE user SET link_avatar='{data['link_avatar']}', user_name='{data['user_name']}', ip_register='{data['ip_register']}',"
-            f" device_register='{data['device_register']}', password='{data['password']}', email='{data['email']}' WHERE id={data['id']}")
+    def update_user_model(self, data, uid: int):
+        sql = (
+            "UPDATE user SET link_avatar=%s, user_name=%s, ip_register=%s, "
+            "device_register=%s, password=%s, email=%s WHERE id_user=%s"
+        )
+
+        values = (
+            data.get('link_avatar', None),
+            data.get('user_name', None),
+            data.get('ip_register', None),
+            data.get('device_register', None),
+            data.get('password', None),
+            data.get('email', None),
+            uid
+        )
+
+        self.cur.execute(sql, values)
+
         if self.cur.rowcount > 0:
             return JSONResponse({"message": "UPDATED_SUCCESSFULLY"}, 201)
         else:
             return JSONResponse({"message": "NOTHING_TO_UPDATE"}, 204)
+

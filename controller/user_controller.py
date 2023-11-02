@@ -26,9 +26,9 @@ def delete_user(uid: int):
 
 
 @router.put("/api/users/{uid}")
-async def update_user(request: Request):
+async def update_user(uid: int, request: Request):
     form_data = await request.form()
-    return obj.update_user_model(form_data)
+    return obj.update_user_model(form_data, uid)
 
 
 @router.patch("/api/users/{uid}")

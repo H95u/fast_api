@@ -1,7 +1,6 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from controller import user_controller, checking_img_controller
+from controller import user_controller, checking_img_controller, auth_controller
 
 app = FastAPI()
 
@@ -16,5 +15,4 @@ app.add_middleware(
 
 app.include_router(user_controller.router)
 app.include_router(checking_img_controller.router)
-
-
+app.include_router(auth_controller.router)
