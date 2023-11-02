@@ -32,6 +32,6 @@ async def update_user(uid: int, request: Request):
 
 
 @router.patch("/api/users/{uid}")
-async def update_user(uid: int, request: Request):
+async def patch_user(uid: int, request: Request):
     form_data = await request.form()
     return obj.patch_user_model(form_data, uid)

@@ -12,6 +12,6 @@ async def change_user_password(uid: int, request: Request):
 
 
 @router.post("/api/users/login")
-async def change_user_password(request: Request):
+async def login_user(request: Request):
     form_data = await request.form()
     return obj.login_user(form_data)
