@@ -1,6 +1,8 @@
+import uvicorn
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from controller import user_controller, checking_img_controller, auth_controller
+from controller import user_controller, checking_img_controller, auth_controller, report_comment_controller, \
+    comment_controller, saved_sukien_controller
 
 app = FastAPI()
 
@@ -34,3 +36,9 @@ async def websocket_endpoint(websocket: WebSocket):
 app.include_router(user_controller.router)
 app.include_router(checking_img_controller.router)
 app.include_router(auth_controller.router)
+app.include_router(report_comment_controller.router)
+app.include_router(comment_controller.router)
+app.include_router(saved_sukien_controller.router)
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=1995)

@@ -1,22 +1,10 @@
 import mysql.connector
-from pydantic import BaseModel
+from configs.mysql_config import dbconfig
 from fastapi.responses import JSONResponse
 from contextlib import closing
-from configs.mysql_config import dbconfig
 
 
-class Saved_sukien(BaseModel):
-    link_nam_goc: str
-    link_nu_goc: str
-    link_nam_chua_swap: str
-    link_nu_chua_swap: str
-    link_da_swap: str
-    thoigian_swap: str
-    ten_su_kien: str
-    noidung_su_kien: str
-
-
-class Saved_Sukien_Model:
+class Add_Sukien_Model:
     def __init__(self):
         self.con = mysql.connector.connect(host=dbconfig['host'], user=dbconfig['username'],
                                            password=dbconfig['password'], database=dbconfig['database'])
@@ -29,15 +17,22 @@ class Saved_Sukien_Model:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.con.close()
 
-    def get_saved_sukiens(self):
+    def get_add_sukiens(self):
         with closing(self.con):
-            self.cur.execute("select * from saved_sukien")
+            self.cur.execute("select * from add_sukien")
             result = self.cur.fetchall()
             return result
 
-    def delete_saved_sukien(self, sid: int):
+    def delete_add_sukien(self, sid: int):
         with closing(self.con):
-            self.cur.execute("DELETE FROM saved_sukien WHERE id = %(sid)s", {"sid": sid})
+            self.cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
+            if self.cur.rowcount > 0:
+                return {"message": "DELETED_SUCCESSFULLY"}
+            return {"message": "CONTACT_DEVELOPER"}
+
+    def edit_add_sukien(self, sid: int):
+        with closing(self.con):
+            self.cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
             if self.cur.rowcount > 0:
                 return {"message": "DELETED_SUCCESSFULLY"}
             return {"message": "CONTACT_DEVELOPER"}
