@@ -1,7 +1,6 @@
 import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from contextlib import closing
 from configs.mysql_config import dbconfig
 
 
@@ -30,14 +29,12 @@ class Saved_Sukien_Model:
         self.con.close()
 
     def get_saved_sukiens(self):
-        with closing(self.con):
-            self.cur.execute("select * from saved_sukien")
-            result = self.cur.fetchall()
-            return result
+        self.cur.execute("select * from saved_sukien")
+        result = self.cur.fetchall()
+        return result
 
     def delete_saved_sukien(self, sid: int):
-        with closing(self.con):
-            self.cur.execute("DELETE FROM saved_sukien WHERE id = %(sid)s", {"sid": sid})
-            if self.cur.rowcount > 0:
-                return {"message": "DELETED_SUCCESSFULLY"}
-            return {"message": "CONTACT_DEVELOPER"}
+        self.cur.execute("DELETE FROM saved_sukien WHERE id = %(sid)s", {"sid": sid})
+        if self.cur.rowcount > 0:
+            return {"message": "DELETED_SUCCESSFULLY"}
+        return {"message": "CONTACT_DEVELOPER"}

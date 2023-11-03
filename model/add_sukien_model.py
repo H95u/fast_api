@@ -1,7 +1,6 @@
 import mysql.connector
 from configs.mysql_config import dbconfig
 from fastapi.responses import JSONResponse
-from contextlib import closing
 
 
 class Add_Sukien_Model:
@@ -18,21 +17,18 @@ class Add_Sukien_Model:
         self.con.close()
 
     def get_add_sukiens(self):
-        with closing(self.con):
-            self.cur.execute("select * from add_sukien")
-            result = self.cur.fetchall()
-            return result
+        self.cur.execute("select * from add_sukien")
+        result = self.cur.fetchall()
+        return result
 
     def delete_add_sukien(self, sid: int):
-        with closing(self.con):
-            self.cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
-            if self.cur.rowcount > 0:
-                return {"message": "DELETED_SUCCESSFULLY"}
-            return {"message": "CONTACT_DEVELOPER"}
+        self.cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
+        if self.cur.rowcount > 0:
+            return {"message": "DELETED_SUCCESSFULLY"}
+        return {"message": "CONTACT_DEVELOPER"}
 
     def edit_add_sukien(self, sid: int):
-        with closing(self.con):
-            self.cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
-            if self.cur.rowcount > 0:
-                return {"message": "DELETED_SUCCESSFULLY"}
-            return {"message": "CONTACT_DEVELOPER"}
+        self.cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
+        if self.cur.rowcount > 0:
+            return {"message": "DELETED_SUCCESSFULLY"}
+        return {"message": "CONTACT_DEVELOPER"}

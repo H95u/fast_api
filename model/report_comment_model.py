@@ -1,7 +1,6 @@
 import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from contextlib import closing
 from configs.mysql_config import dbconfig
 
 
@@ -28,7 +27,6 @@ class ReportCommentModel:
         self.con.close()
 
     def get_comments(self):
-        with closing(self.con):
-            self.cur.execute("select * from report_comment")
-            result = self.cur.fetchall()
-            return JSONResponse(result)
+        self.cur.execute("select * from report_comment")
+        result = self.cur.fetchall()
+        return JSONResponse(result)

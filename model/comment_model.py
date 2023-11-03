@@ -1,8 +1,6 @@
 import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from contextlib import closing
-
 from configs.mysql_config import dbconfig
 
 
@@ -50,19 +48,18 @@ class CommentModel:
         sql = "SELECT * FROM comment"
         if conditions:
             sql += " WHERE " + " AND ".join(conditions)
-            with closing(self.con):
-                self.cur.execute(sql, params)
-                result = self.cur.fetchall()
-                if result:
-                    return result
-                return {"message": "No data found"}
+
+        self.cur.execute(sql, params)
+        result = self.cur.fetchall()
+        if result:
+            return result
+        return {"message": "No data found"}
 
     def delete_comment(self, cid: int):
-        with closing(self.con):
-            self.cur.execute("DELETE FROM comment WHERE id_Comment = %(cid)s", {"cid": cid})
-            if self.cur.rowcount > 0:
-                return {"message": "DELETED_SUCCESSFULLY"}
-            return {"message": "CONTACT_DEVELOPER"}
+        self.cur.execute("DELETE FROM comment WHERE id_Comment = %(cid)s", {"cid": cid})
+        if self.cur.rowcount > 0:
+            return {"message": "DELETED_SUCCESSFULLY"}
+        return {"message": "CONTACT_DEVELOPER"}
 
     def edit_comment(self, data, cid: int):
         sql = (
@@ -73,10 +70,8 @@ class CommentModel:
             data.get('noi_dung_Comment', None),
             cid
         )
-
-        with closing(self.con):
-            self.cur.execute(sql, values)
-            if self.cur.rowcount > 0:
-                return JSONResponse({"message": "UPDATED_SUCCESSFULLY"}, 201)
-            else:
-                return JSONResponse({"message": "NOTHING_TO_UPDATE"}, 204)
+        self.cur.execute(sql, values)
+        if self.cur.rowcount > 0:
+            return JSONResponse({"message": "UPDATED_SUCCESSFULLY"}, 201)
+        else:
+            return JSONResponse({"message": "NOTHING_TO_UPDATE"}, 204)
