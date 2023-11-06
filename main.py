@@ -11,7 +11,7 @@ app.add_middleware(
     allow_origins=["*"],  # Allow all origins
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
-    allow_credentials=False,  # Disable credentials (cookies, auth)
+    allow_credentials=False,  # Disable credentials (cookies, jwt_auth)
     expose_headers=["*"],  # Expose all headers
 )
 

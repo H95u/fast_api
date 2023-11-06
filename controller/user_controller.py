@@ -11,7 +11,9 @@ def hello_api():
 
 
 @router.get('/api/users')
-def all_users(email: str = Query(default=None), ip_register: str = Query(default=None)):
+def all_users(request: Request):
+    email = request.query_params.get('email', None)
+    ip_register = request.query_params.get('ip_register', None)
     return obj.get_users(email, ip_register)
 
 
@@ -20,13 +22,14 @@ def add_user(data: User):
     return obj.add_user_model(data)
 
 
-@router.delete("/api/users/{uid}")
-def delete_user(uid: int):
+@router.delete("/api/users")
+def delete_user(request: Request):
+    uid = int(request.query_params.get("uid"))
     return obj.delete_user_model(uid)
 
 
 @router.put("/api/users/{uid}")
-async def update_user(uid: int, request: Request):
+async def update_user(request: Request, uid: int):
     form_data = await request.form()
     return obj.update_user_model(form_data, uid)
 

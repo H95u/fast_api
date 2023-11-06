@@ -6,5 +6,5 @@ numpy~=1.26.1
 requests~=2.31.0
 
 uvicorn~=0.23.2
-python-dotenv
 PyJWT~=2.8.0
+python-decouple==3.3
