@@ -1,7 +1,6 @@
-import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from configs.mysql_config import dbconfig
+from configs.mysql_config import My_Connection
 
 
 class ReportComment(BaseModel):
@@ -14,19 +13,10 @@ class ReportComment(BaseModel):
 
 
 class ReportCommentModel:
-    def __init__(self):
-        self.con = mysql.connector.connect(host=dbconfig['host'], user=dbconfig['username'],
-                                           password=dbconfig['password'], database=dbconfig['database'])
-        self.con.autocommit = True
-        self.cur = self.con.cursor(dictionary=True)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.con.close()
 
     def get_comments(self):
-        self.cur.execute("select * from report_comment")
-        result = self.cur.fetchall()
-        return JSONResponse(result)
+        with My_Connection() as db_connection:
+            cur = db_connection.cur
+            cur.execute("select * from report_comment")
+            result = cur.fetchall()
+            return JSONResponse(result)

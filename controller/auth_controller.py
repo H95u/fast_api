@@ -6,6 +6,7 @@ obj = Auth_Model()
 
 
 @router.post("/api/users/change-password/{uid}")
+@obj.token_auth()
 async def change_user_password(uid: int, request: Request):
     form_data = await request.form()
     return obj.change_user_password(form_data, uid)

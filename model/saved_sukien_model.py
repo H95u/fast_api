@@ -1,7 +1,5 @@
-import mysql.connector
 from pydantic import BaseModel
-from fastapi.responses import JSONResponse
-from configs.mysql_config import dbconfig
+from configs.mysql_config import My_Connection
 
 
 class Saved_sukien(BaseModel):
@@ -16,25 +14,15 @@ class Saved_sukien(BaseModel):
 
 
 class Saved_Sukien_Model:
-    def __init__(self):
-        self.con = mysql.connector.connect(host=dbconfig['host'], user=dbconfig['username'],
-                                           password=dbconfig['password'], database=dbconfig['database'])
-        self.con.autocommit = True
-        self.cur = self.con.cursor(dictionary=True)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.con.close()
-
     def get_saved_sukiens(self):
-        self.cur.execute("select * from saved_sukien")
-        result = self.cur.fetchall()
-        return result
+        with My_Connection() as db_connection:
+            db_connection.cur.execute("select * from saved_sukien")
+            result = db_connection.cur.fetchall()
+            return result
 
     def delete_saved_sukien(self, sid: int):
-        self.cur.execute("DELETE FROM saved_sukien WHERE id = %(sid)s", {"sid": sid})
-        if self.cur.rowcount > 0:
-            return {"message": "DELETED_SUCCESSFULLY"}
-        return {"message": "CONTACT_DEVELOPER"}
+        with My_Connection() as db_connection:
+            db_connection.cur.execute("DELETE FROM saved_sukien WHERE id = %(sid)s", {"sid": sid})
+            if db_connection.cur.rowcount > 0:
+                return {"message": "DELETED_SUCCESSFULLY"}
+            return {"message": "CONTACT_DEVELOPER"}

@@ -1,7 +1,6 @@
-import mysql.connector
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from configs.mysql_config import dbconfig
+from configs.mysql_config import My_Connection
 
 
 class Comment(BaseModel):
@@ -19,17 +18,6 @@ class Comment(BaseModel):
 
 
 class CommentModel:
-    def __init__(self):
-        self.con = mysql.connector.connect(host=dbconfig['host'], user=dbconfig['username'],
-                                           password=dbconfig['password'], database=dbconfig['database'])
-        self.con.autocommit = True
-        self.cur = self.con.cursor(dictionary=True)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.con.close()
 
     def get_comments(self, content: str, ip_comment: str, user_name: str):
         conditions = []
@@ -48,18 +36,19 @@ class CommentModel:
         sql = "SELECT * FROM comment"
         if conditions:
             sql += " WHERE " + " AND ".join(conditions)
-
-        self.cur.execute(sql, params)
-        result = self.cur.fetchall()
-        if result:
-            return result
-        return {"message": "No data found"}
+        with My_Connection() as db_connection:
+            db_connection.cur.execute(sql, params)
+            result = db_connection.cur.fetchall()
+            if result:
+                return result
+            return {"message": "No data found"}
 
     def delete_comment(self, cid: int):
-        self.cur.execute("DELETE FROM comment WHERE id_Comment = %(cid)s", {"cid": cid})
-        if self.cur.rowcount > 0:
-            return {"message": "DELETED_SUCCESSFULLY"}
-        return {"message": "CONTACT_DEVELOPER"}
+        with My_Connection() as db_connection:
+            db_connection.cur.execute("DELETE FROM comment WHERE id_Comment = %(cid)s", {"cid": cid})
+            if db_connection.cur.rowcount > 0:
+                return {"message": "DELETED_SUCCESSFULLY"}
+            return {"message": "CONTACT_DEVELOPER"}
 
     def edit_comment(self, data, cid: int):
         sql = (
@@ -70,8 +59,9 @@ class CommentModel:
             data.get('noi_dung_Comment', None),
             cid
         )
-        self.cur.execute(sql, values)
-        if self.cur.rowcount > 0:
-            return JSONResponse({"message": "UPDATED_SUCCESSFULLY"}, 201)
-        else:
-            return JSONResponse({"message": "NOTHING_TO_UPDATE"}, 204)
+        with My_Connection() as db_connection:
+            db_connection.cur.execute(sql, values)
+            if db_connection.cur.rowcount > 0:
+                return JSONResponse({"message": "UPDATED_SUCCESSFULLY"}, 201)
+            else:
+                return JSONResponse({"message": "NOTHING_TO_UPDATE"}, 204)

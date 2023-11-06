@@ -7,3 +7,4 @@ requests~=2.31.0
 
 uvicorn~=0.23.2
 python-dotenv
+PyJWT~=2.8.0
