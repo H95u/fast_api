@@ -22,9 +22,8 @@ def add_user(data: User):
     return obj.add_user_model(data)
 
 
-@router.delete("/api/users")
-def delete_user(request: Request):
-    uid = int(request.query_params.get("uid"))
+@router.delete("/api/users/{uid}")
+def delete_user(uid: int):
     return obj.delete_user_model(uid)
 
 

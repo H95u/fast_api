@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from configs.mysql_config import My_Connection
+from fastapi.responses import JSONResponse
 
 
 class Saved_sukien(BaseModel):
@@ -26,3 +27,16 @@ class Saved_Sukien_Model:
             if db_connection.cur.rowcount > 0:
                 return {"message": "DELETED_SUCCESSFULLY"}
             return {"message": "CONTACT_DEVELOPER"}
+
+    def patch_saved_sukien(self, sid: int, data):
+        qry = "UPDATE saved_sukien SET "
+        for key in data:
+            if key != 'id':
+                qry += f"{key}='{data[key]}',"
+        qry = qry[:-1] + f" WHERE id = {sid}"
+        with My_Connection() as db_connection:
+            db_connection.cur.execute(qry)
+            if db_connection.cur.rowcount > 0:
+                return JSONResponse({"message": "UPDATED_SUCCESSFULLY"}, 200)
+            else:
+                return JSONResponse({"message": "NOTHING_TO_UPDATE"}, 204)

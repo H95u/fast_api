@@ -10,6 +10,12 @@ def get_saved_sukiens():
     return obj.get_saved_sukiens()
 
 
-@router.delete("/api/saved-sukiens/{cid}")
-def get_saved_sukiens(cid: int):
-    return obj.delete_saved_sukien(cid)
+@router.delete("/api/saved-sukiens/{eid}")
+def delete_saved_sukiens(eid: int):
+    return obj.delete_saved_sukien(eid)
+
+
+@router.patch("/api/saved-sukiens/{eid}")
+async def patch_saved_sukiens(eid: int, request: Request):
+    form_data = await request.form()
+    return obj.patch_saved_sukien(eid, form_data)
