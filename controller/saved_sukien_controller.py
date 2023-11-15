@@ -1,5 +1,5 @@
 from fastapi import Query, Request, APIRouter
-from model.saved_sukien_model import Saved_Sukien_Model
+from model.saved_sukien_model import Saved_Sukien_Model, Saved_sukien
 
 router = APIRouter()
 obj = Saved_Sukien_Model()
@@ -19,3 +19,8 @@ def delete_saved_sukiens(eid: int):
 async def patch_saved_sukiens(eid: int, request: Request):
     form_data = await request.form()
     return obj.patch_saved_sukien(eid, form_data)
+
+
+@router.post("/api/saved-sukiens")
+def post_saved_sukiens(data: Saved_sukien):
+    return obj.add_sukien(data)
