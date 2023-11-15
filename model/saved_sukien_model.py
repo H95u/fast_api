@@ -35,7 +35,7 @@ class Saved_Sukien_Model:
 
     def delete_saved_sukien(self, sid: int):
         with My_Connection() as db_connection:
-            db_connection.cur.execute("DELETE FROM saved_sukien WHERE id = %(sid)s", {"sid": sid})
+            db_connection.cur.execute("DELETE FROM saved_sukien WHERE id_saved = %(sid)s", {"sid": sid})
             if db_connection.cur.rowcount > 0:
                 return {"message": "DELETED_SUCCESSFULLY"}
             return {"message": "CONTACT_DEVELOPER"}
@@ -45,7 +45,7 @@ class Saved_Sukien_Model:
         for key in data:
             if key != 'id':
                 qry += f"{key}='{data[key]}',"
-        qry = qry[:-1] + f" WHERE id = {sid}"
+        qry = qry[:-1] + f" WHERE id_saved = {sid}"
         with My_Connection() as db_connection:
             db_connection.cur.execute(qry)
             if db_connection.cur.rowcount > 0:
@@ -66,3 +66,16 @@ class Saved_Sukien_Model:
                     return JSONResponse(content={"message": "Failed to create sukien"}, status_code=500)
             except Exception as e:
                 return JSONResponse(content={e}, status_code=500)
+
+    def saved_sukien_pagination_model(self, pno, limit):
+        pno = int(pno)
+        limit = int(limit)
+        start = (pno * limit) - limit
+        qry = f"SELECT * FROM saved_sukien LIMIT {start}, {limit}"
+        with My_Connection() as db_connection:
+            db_connection.cur.execute(qry)
+            result = db_connection.cur.fetchall()
+            if len(result) > 0:
+                return JSONResponse({"page": pno, "per_page": limit, "this_page": len(result), "payload": result})
+            else:
+                return JSONResponse({"message": "No Data Found"}, 204)

@@ -10,6 +10,11 @@ def get_saved_sukiens():
     return obj.get_saved_sukiens()
 
 
+@router.get("/api/saved-sukiens/pagination")
+def pagination_saved_sukiens():
+    return obj.saved_sukien_pagination_model(1, 5)
+
+
 @router.delete("/api/saved-sukiens/{eid}")
 def delete_saved_sukiens(eid: int):
     return obj.delete_saved_sukien(eid)
