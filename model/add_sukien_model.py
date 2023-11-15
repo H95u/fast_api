@@ -15,7 +15,7 @@ class Add_Sukien_Model:
     def delete_add_sukien(self, sid: int):
         with My_Connection() as db_connection:
             cur = db_connection.cur
-            cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
+            cur.execute("DELETE FROM add_sukien WHERE id_add = %(sid)s", {"sid": sid})
 
             if cur.rowcount > 0:
                 return JSONResponse(content={"message": "DELETED_SUCCESSFULLY"})
@@ -25,7 +25,7 @@ class Add_Sukien_Model:
     def edit_add_sukien(self, sid: int):
         with My_Connection() as db_connection:
             cur = db_connection.cur
-            cur.execute("DELETE FROM add_sukien WHERE id = %(sid)s", {"sid": sid})
+            cur.execute("DELETE FROM add_sukien WHERE id_add = %(sid)s", {"sid": sid})
             if cur.rowcount > 0:
                 return {"message": "UPDATED_SUCCESSFULLY"}
             return {"message": "CONTACT_DEVELOPER"}
