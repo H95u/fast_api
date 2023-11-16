@@ -8,4 +8,4 @@ obj = MessageModel()
 
 @router.get("/api/messages")
 def get_messages(id_user: int = Query()):
-    return obj.get_messages_by_id_user(id_user)
+    return obj.get_user_contact_history(id_user)

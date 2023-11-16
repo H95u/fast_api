@@ -11,8 +11,9 @@ def get_saved_sukiens():
 
 
 @router.get("/api/saved-sukiens/pagination")
-def pagination_saved_sukiens():
-    return obj.saved_sukien_pagination_model(1, 5)
+def pagination_saved_sukiens(request: Request):
+    pno = request.query_params.get('pno', None)
+    return obj.saved_sukien_pagination_model(pno, 20)
 
 
 @router.delete("/api/saved-sukiens/{eid}")

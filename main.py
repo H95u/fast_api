@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import uvicorn
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,7 +26,9 @@ async def websocket_endpoint(websocket: WebSocket):
         try:
             # Wait for any message from the client
             data = await websocket.receive_text()
-
+            time_stamp = datetime.now()
+            print(time_stamp)
+            print(data)
             # Send message to the client
             await websocket.send_text(data)
         except Exception as e:

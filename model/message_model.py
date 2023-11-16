@@ -18,3 +18,12 @@ class MessageModel:
             if result:
                 return result
             return {"message": "No data found"}
+
+    def get_user_contact_history(self, uid: int):
+        with My_Connection() as db_connection:
+            db_connection.cur.execute("select link_avatar,user_name,timestamp,content from contact_history_view where receiver_id = %(uid)s",
+                                      {"uid": uid})
+            result = db_connection.cur.fetchall()
+            if result:
+                return result
+            return {"message": "No data found"}
