@@ -7,8 +7,8 @@ obj = Add_Sukien_Model()
 
 @router.get("/api/add-sukiens")
 def get_add_sukiens(request: Request):
-    noidung_sukien = request.query_params.get('noidung-sukien', None)
-    ten_sukien = request.query_params.get('ten-sukien', None)
+    noidung_sukien = request.query_params.get('noidung_sukien', None)
+    ten_sukien = request.query_params.get('ten_sukien', None)
     return obj.get_add_sukiens(noidung_sukien, ten_sukien)
 
 

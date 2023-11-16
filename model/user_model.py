@@ -35,6 +35,26 @@ class UserModel:
                 return result
             return {"message": "No data found"}
 
+    def get_users_by_comment(self, noi_dung_Comment: str):
+        conditions = []
+        params = {}
+
+        if noi_dung_Comment:
+            conditions.append("comment.noi_dung_Comment LIKE %(noi_dung_Comment)s")
+            params['noi_dung_Comment'] = f"%{noi_dung_Comment}%"
+
+        sql = "SELECT user.id_user, user.link_avatar, user.user_name, user.ip_register,user.device_register, user.password, user.email, user.count_comment,user.count_sukien, user.count_view, comment.noi_dung_Comment" \
+               " FROM futurelove.user INNER JOIN futurelove.comment ON user.id_user=comment.id_user"
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
+        with My_Connection() as db_connection:
+            db_connection.cur.execute(sql, params)
+            result = db_connection.cur.fetchall()
+            if result:
+                return result
+            return {"message": "No data found"}
+
+
     def add_user_model(self, data: User):
         sql = "INSERT INTO user (link_avatar, user_name, ip_register, device_register, password, email, count_sukien, count_comment, count_view) " \
               "VALUES (%(link_avatar)s, %(user_name)s, %(ip_register)s, %(device_register)s, %(password)s, %(email)s, 0, 0, 0)"

@@ -10,11 +10,17 @@ def hello_api():
     return "im hieule in the api !"
 
 
-@router.get('/api/users')
+@router.get('/api/users/')
 def all_users(request: Request):
     email = request.query_params.get('email', None)
     ip_register = request.query_params.get('ip_register', None)
     return obj.get_users(email, ip_register)
+
+
+@router.get('/api/users/search_by_comment')
+def get_users_by_comment(request: Request):
+    noi_dung_Comment = request.query_params.get('noi_dung', None)
+    return obj.get_users_by_comment(noi_dung_Comment)
 
 
 @router.post("/api/users")
