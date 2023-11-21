@@ -71,11 +71,25 @@ class Saved_Sukien_Model:
         pno = int(pno)
         limit = int(limit)
         start = (pno * limit) - limit
-        qry = f"SELECT * FROM saved_sukien LIMIT {start}, {limit}"
+
+        # Query to get paginated results with total count
+        qry_result = f"SELECT SQL_CALC_FOUND_ROWS * FROM saved_sukien LIMIT {start}, {limit}"
+        qry_count = "SELECT FOUND_ROWS() as total_count"
+
         with My_Connection() as db_connection:
-            db_connection.cur.execute(qry)
+            db_connection.cur.execute(qry_result)
             result = db_connection.cur.fetchall()
+
+            db_connection.cur.execute(qry_count)
+            total_count = db_connection.cur.fetchone()['total_count']
+
             if len(result) > 0:
-                return JSONResponse({"page": pno, "per_page": limit, "this_page": len(result), "payload": result})
+                return JSONResponse({
+                    "page": pno,
+                    "per_page": limit,
+                    "total_records": total_count,
+                    "this_page": len(result),
+                    "payload": result
+                })
             else:
                 return JSONResponse({"message": "No Data Found"}, 204)
