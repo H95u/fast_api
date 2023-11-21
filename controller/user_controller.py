@@ -17,6 +17,12 @@ def all_users(request: Request):
     return obj.get_users(email, ip_register)
 
 
+@router.get('/api/users/search_by_comment')
+def get_users_by_comment(request: Request):
+    noi_dung_Comment = request.query_params.get('noi_dung', None)
+    return obj.get_users_by_comment(noi_dung_Comment)
+
+
 @router.post("/api/users")
 def add_user(data: User):
     return obj.add_user_model(data)
